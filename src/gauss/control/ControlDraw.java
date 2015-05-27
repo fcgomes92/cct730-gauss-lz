@@ -1,14 +1,20 @@
 package gauss.control;
 
-import java.awt.Graphics2D;
+import gauss.model.DrawPanel;
+
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class ControlDraw {
-	public void drawImage(JPanel p, BufferedImage bi){
-		Graphics2D g = (Graphics2D)p.getGraphics();
-		g.drawImage(bi, 0, 0, null);
-		g.dispose();
+	public void drawImage(JScrollPane sp, DrawPanel p, BufferedImage bi){
+//		Graphics g = p.getGraphics();
+//		g.drawImage(bi, 0, 0, null);
+//		p.paintComponents(g);
+		sp.setPreferredSize(new Dimension(bi.getWidth(),bi.getHeight()));
+		p.setPreferredSize(new Dimension(bi.getWidth(),bi.getHeight()));
+		p.setImage(bi);
+		p.repaint();
 	}
 }

@@ -22,10 +22,11 @@ public class ControlFile {
 		int chooseReturn = 0;
 		BufferedImage bi = null;
 		chooseReturn = this.fileChooserOpen.showDialog(jf, "OK");
+		
 		if(chooseReturn == JFileChooser.APPROVE_OPTION){
 			f = this.fileChooserOpen.getSelectedFile();
 			System.out.println("[LOG] Arquivo escolhido: " + f.getName());
-			bi = (BufferedImage) ImageIO.read(f);
+			bi = ImageIO.read(f);
 			return bi;
 		}
 		

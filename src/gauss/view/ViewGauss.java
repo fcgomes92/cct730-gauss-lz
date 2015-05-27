@@ -1,6 +1,7 @@
 package gauss.view;
 
 import gauss.control.ControlGauss;
+import gauss.model.DrawPanel;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 
 public class ViewGauss {
@@ -33,8 +35,8 @@ public class ViewGauss {
 	private JPanel panelMain;
 	private JScrollPane spanelImgOriginal;
 	private JScrollPane spanelImgAlterada;
-	private JPanel panelImgOriginal;
-	private JPanel panelImgAlterada;
+	private DrawPanel panelImgOriginal;
+	private DrawPanel panelImgAlterada;
 
 	// Layout
 	private SpringLayout sLayoutMainPanel;
@@ -51,7 +53,7 @@ public class ViewGauss {
 		
 		private JMenu menuFiltros;
 		// Itens menu
-			// TODO: Declarar filtros
+			private JMenuItem menuItemFiltrosGaussiano;
 	
 	
 	public ViewGauss(ControlGauss ctrl) throws IOException{
@@ -91,7 +93,16 @@ public class ViewGauss {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controlGauss.openImage(frameMain, panelImgOriginal);
+				controlGauss.openImage(frameMain, spanelImgOriginal, panelImgOriginal);
+			}
+		});
+		
+		this.menuItemFiltrosGaussiano = new JMenuItem(this.config.getProperty("MENU_ITEM_FILTRO_GAUSSIANO"));
+		this.menuItemFiltrosGaussiano.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlGauss.startFilter(spanelImgAlterada,panelImgAlterada);
 			}
 		});
 		
@@ -99,17 +110,19 @@ public class ViewGauss {
 		this.menuOpcoes.add(this.menuItemOpcoesCarregar);
 		this.menuOpcoes.add(this.menuItemOpcoesSair);
 		
+		this.menuFiltros.add(this.menuItemFiltrosGaussiano);
+		
 		this.menuBarPrincipal.add(this.menuOpcoes);
 		this.menuBarPrincipal.add(this.menuFiltros);
 		
 		// Inicialização dos panels
-		this.panelImgAlterada = new JPanel();
-		this.panelImgOriginal = new JPanel();
+		this.panelImgAlterada = new DrawPanel();
+		this.panelImgOriginal = new DrawPanel();
 		this.panelImgOriginal.setBackground(Color.RED);
 		this.panelImgAlterada.setBackground(Color.BLUE);
 		
-		this.spanelImgOriginal = new JScrollPane(this.panelImgOriginal, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		this.spanelImgAlterada = new JScrollPane(this.panelImgAlterada, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		this.spanelImgOriginal = new JScrollPane(this.panelImgOriginal, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		this.spanelImgAlterada = new JScrollPane(this.panelImgAlterada, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		this.panelMain = new JPanel();
 //		this.spanelImgAlterada.add(this.panelImgAlterada);
@@ -135,6 +148,7 @@ public class ViewGauss {
 		this.dimensionMin = new Dimension(500,500);
 		
 		this.frameMain = new JFrame(this.config.getProperty("TITULO_JANELA"));
+		this.frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frameMain.setMinimumSize(this.dimensionMin);
 		this.frameMain.setSize(this.dimensionMin);
 		this.frameMain.setJMenuBar(this.menuBarPrincipal);
