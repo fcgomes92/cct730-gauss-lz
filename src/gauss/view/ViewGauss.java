@@ -118,8 +118,8 @@ public class ViewGauss {
 		// Inicialização dos panels
 		this.panelImgAlterada = new DrawPanel();
 		this.panelImgOriginal = new DrawPanel();
-		this.panelImgOriginal.setBackground(Color.RED);
-		this.panelImgAlterada.setBackground(Color.BLUE);
+		this.panelImgOriginal.setBackground(Color.WHITE);
+		this.panelImgAlterada.setBackground(Color.WHITE);
 		
 		this.spanelImgOriginal = new JScrollPane(this.panelImgOriginal, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.spanelImgAlterada = new JScrollPane(this.panelImgAlterada, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
