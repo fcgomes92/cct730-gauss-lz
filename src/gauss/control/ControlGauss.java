@@ -10,26 +10,40 @@ import java.text.ParseException;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
+import lz.control.ControlLZ;
+
 public class ControlGauss {
-	
-	private ViewGauss mainViewGauss;
+
 	private ControlFile controlFile;
 	private ControlDraw controlDraw;
 	private ControlFilter controlFilter;
 	
 	private BufferedImage imagemOriginal;
-	private BufferedImage imagemAlterada; 
+	private BufferedImage imagemAlterada;
+	
+	private ControlLZ controlLZ;
 	
 	public ControlGauss() throws IOException, ParseException{
-		this.mainViewGauss = new ViewGauss(this);
+		new ViewGauss(this);
 		this.controlFile = new ControlFile();
 		this.controlDraw = new ControlDraw();
 		this.controlFilter = new ControlFilter();
+		this.controlLZ = new ControlLZ();
 	}
 	
 	public void exit(JFrame f){
 		f.dispose();
 		System.exit(0);
+	}
+	
+	public void saveImage(JFrame jf){
+		try {
+			String path = controlFile.saveImage(jf);
+			if(path != null && !path.isEmpty())
+				controlLZ.saveUsingLZ77(null,path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void openImage(JFrame f, JScrollPane sp, DrawPanel p){
@@ -43,7 +57,7 @@ public class ControlGauss {
 	}
 	
 	public void startFilter(JScrollPane sp, DrawPanel p, int sz, int sig){
-		 // GET CONFIG
+		 // GET CONFI	G
 		 System.out.println("Setando valores entrados pelo usuário...");
 		 int sigma = sig;
 		 int size = sz;

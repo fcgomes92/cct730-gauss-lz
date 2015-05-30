@@ -1,6 +1,5 @@
 package lz.view;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +7,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Properties;
 
-import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,21 +16,14 @@ private Properties config;
 	
 	private JPanel panelMain;
 	private JPanel panelCampos;
-	private JPanel panelBotoes;
 	
 	private GridLayout layoutGeral;
 	private GridLayout layoutCampos;
-	private GridLayout layoutBotoes;
-	
-	private JButton btOk;
-	private JButton btCancel;
 	
 	private JLabel lblBuffer;
 	private JFormattedTextField txtFieldBuffer;
 	private JLabel lblDicionario;
 	private JFormattedTextField txtFieldDicionario;
-	
-	private Dimension dimension;
 	
 	public ViewConfigScreenLZ() throws IOException, ParseException{
 		// Load das configurações de strings
@@ -44,24 +35,23 @@ private Properties config;
 		NumberFormat format = NumberFormat.getNumberInstance();
 		format.setMaximumIntegerDigits(5);
 		
-		this.lblBuffer = new JLabel(this.config.getProperty("LABEL_CONFIG_SIGMA"));
+		this.lblBuffer = new JLabel(this.config.getProperty("LABEL_CONFIG_BUFFER"));
 		this.txtFieldBuffer = new JFormattedTextField(format);
 		this.lblDicionario = new JLabel(this.config.getProperty("LABEL_CONFIG_DICIONARIO"));
 		this.txtFieldDicionario = new JFormattedTextField(format);
 		
 		this.layoutGeral = new GridLayout(1,1,5,5);
 		this.layoutCampos = new GridLayout(2,2);
-		this.layoutBotoes = new GridLayout(1,2,10,10);
 		
 		this.panelMain = new JPanel();
 		this.panelMain.setLayout(layoutGeral);
 		this.panelCampos = new JPanel();
 		this.panelCampos.setLayout(layoutCampos);
 		
-		this.panelCampos.add(lblBuffer,0,0);
-		this.panelCampos.add(txtFieldBuffer,0,1);
-		this.panelCampos.add(lblDicionario,1,0);
-		this.panelCampos.add(txtFieldDicionario,1,1);
+		this.panelCampos.add(this.lblBuffer,0,0);
+		this.panelCampos.add(this.txtFieldBuffer,0,1);
+		this.panelCampos.add(this.lblDicionario,1,0);
+		this.panelCampos.add(this.txtFieldDicionario,1,1);
 		
 		this.panelMain.add(this.panelCampos,0);
 	}
@@ -74,19 +64,19 @@ private Properties config;
 		this.panelMain = panelMain;
 	}
 
-	public JFormattedTextField getTxtFieldSigma() {
+	public JFormattedTextField getTxtFieldBuffer() {
 		return txtFieldBuffer;
 	}
 
-	public void setTxtFieldSigma(JFormattedTextField txtFieldConfig1) {
+	public void setTxtFieldBuffer(JFormattedTextField txtFieldConfig1) {
 		this.txtFieldBuffer = txtFieldConfig1;
 	}
 
-	public JFormattedTextField getTxtFieldSize() {
+	public JFormattedTextField getTxtFieldDicionario() {
 		return txtFieldDicionario;
 	}
 
-	public void setTxtFieldSize(JFormattedTextField txtFieldConfig2) {
+	public void setTxtFieldDicionario(JFormattedTextField txtFieldConfig2) {
 		this.txtFieldDicionario = txtFieldConfig2;
 	}
 }

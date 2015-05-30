@@ -90,11 +90,12 @@ public class ViewGauss {
 		this.menuOpcoes = new JMenu(this.config.getProperty("MENU_OPCOES"));
 		
 		this.menuItemOpcoesSalvar = new JMenuItem(this.config.getProperty("MENU_ITEM_SALVAR"));
+		this.menuItemOpcoesSalvar.setEnabled(false);
 		this.menuItemOpcoesSalvar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Chamada do método de salvar a imagem alterada
+				controlGauss.saveImage(frameMain);
 			}
 		});
 		
@@ -132,6 +133,7 @@ public class ViewGauss {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				controlGauss.startFilter(spanelImgAlterada, panelImgAlterada, sliderTamanhoKernel.getValue(), sliderDesvioPadrao.getValue());
+				menuItemOpcoesSalvar.setEnabled(true);
 			}
 		});
 		
