@@ -9,17 +9,21 @@ public class ControlFilter {
 		BufferedImage novaImagem = new BufferedImage(bfi.getWidth(),bfi.getHeight(),BufferedImage.TYPE_INT_RGB);
 		double[][] kernel = this.makeKernel(size, sigma);
 		double[][] output = new double[bfi.getWidth()][bfi.getHeight()];
-		System.out.println("Kernel:");
-//		for (double[] d1 : makeKernel(size, sigma)) {
-//			for (double d2 : d1) {
-//				System.out.print(" " + d2 + " ");
-//			}
-//			System.out.println();
-//		}
+		double sum = 0.0;
+		
+		// Imprimir kernel
+//		System.out.println("Kernel:");
+//		System.out.println(this.printKernel(kernel));
+		
+		// Faz o calculo da soma do kernel
+		for (int x = 0; x < size; ++x) 
+		    for (int y = 0; y < size; ++y)
+		        sum += kernel[x][y];
+		
 		for (int i = 0; i < bfi.getWidth(); i++) {
 			for (int j = 0; j < bfi.getHeight(); j++) {
 //				output[i][j]=
-				novaImagem.setRGB(i, j, this.lowPass(bfi, new Point(i,j), size, kernel, bfi.getWidth(),bfi.getHeight()).getRGB());
+				novaImagem.setRGB(i, j, this.lowPass(bfi, new Point(i,j), size, kernel, sum, bfi.getWidth(),bfi.getHeight()).getRGB());
 			}
 		}
 		return novaImagem;
@@ -51,9 +55,8 @@ public class ControlFilter {
 		return kernel;
 	}
 	
-	private Color lowPass(BufferedImage input, Point center, int size, double[][] kernel, int maxWidth, int maxHeight){
+	private Color lowPass(BufferedImage input, Point center, int size, double[][] kernel, double sum, int maxWidth, int maxHeight){
 		double pixel = 0.0;
-		double sum = 0.0;
 		double[] color = new double[] {0,0,0};
 		Color tempColor;
 		for (int i = 0; i < size; i++) {
@@ -66,7 +69,6 @@ public class ControlFilter {
 					color[1] += tempColor.getGreen()*kernel[i][j];
 					color[2] += tempColor.getBlue()*kernel[i][j];
 //					pixel += input.getRGB(i, j)*kernel[i][j];
-					sum += kernel[i][j];
 				}
 			}
 		}
@@ -76,5 +78,16 @@ public class ControlFilter {
 		tempColor = new Color((int)color[0],(int)color[1],(int)color[2]);
 //		System.out.println(tempColor.toString());
 		return tempColor;
+	}
+	
+	private String printKernel(double [][] kernel){
+		String s = "";
+			for (double[] d1 : kernel) {
+			for (double d2 : d1) {
+				s+=" " + d2 + " ";
+			}
+			s+='\n';
+		}
+		return s;
 	}
 }

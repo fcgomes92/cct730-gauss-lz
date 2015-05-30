@@ -8,7 +8,7 @@ import gauss.control.ControlGauss;
 public class ControlApp {
 	public static void main(String[] args) {
 		try {
-			ControlGauss controlFilters = new ControlGauss();
+			new ControlGauss();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {

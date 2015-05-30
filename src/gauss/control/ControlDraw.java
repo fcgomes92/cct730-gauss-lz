@@ -16,5 +16,6 @@ public class ControlDraw {
 		p.setPreferredSize(new Dimension(bi.getWidth(),bi.getHeight()));
 		p.setImage(bi);
 		p.repaint();
+		sp.updateUI();
 	}
 }

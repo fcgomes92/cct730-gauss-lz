@@ -1,4 +1,4 @@
-package gauss.view;
+package lz.view;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -12,11 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 
-public class ViewConfigScreen {
-	private Properties config;
+public class ViewConfigScreenLZ {
+private Properties config;
 	
 	private JPanel panelMain;
 	private JPanel panelCampos;
@@ -29,27 +27,27 @@ public class ViewConfigScreen {
 	private JButton btOk;
 	private JButton btCancel;
 	
-	private JLabel lblSigma;
-	private JFormattedTextField txtFieldSigma;
-	private JLabel lblTamanho;
-	private JFormattedTextField txtFieldTamanho;
+	private JLabel lblBuffer;
+	private JFormattedTextField txtFieldBuffer;
+	private JLabel lblDicionario;
+	private JFormattedTextField txtFieldDicionario;
 	
 	private Dimension dimension;
 	
-	public ViewConfigScreen() throws IOException, ParseException{
+	public ViewConfigScreenLZ() throws IOException, ParseException{
 		// Load das configurações de strings
 		this.config = new Properties();
-		InputStream in = getClass().getResourceAsStream("/gauss/util/resources/ResourcesStringsGauss.properties");
+		InputStream in = getClass().getResourceAsStream("/lz/util/resources/ResourcesStringsLZ.properties");
 		this.config.load(in);
 		in.close();
 		
 		NumberFormat format = NumberFormat.getNumberInstance();
 		format.setMaximumIntegerDigits(5);
 		
-		this.lblSigma = new JLabel(this.config.getProperty("LABEL_CONFIG_SIGMA"));
-		this.txtFieldSigma = new JFormattedTextField(format);
-		this.lblTamanho = new JLabel(this.config.getProperty("LABEL_CONFIG_SIZE"));
-		this.txtFieldTamanho = new JFormattedTextField(format);
+		this.lblBuffer = new JLabel(this.config.getProperty("LABEL_CONFIG_SIGMA"));
+		this.txtFieldBuffer = new JFormattedTextField(format);
+		this.lblDicionario = new JLabel(this.config.getProperty("LABEL_CONFIG_DICIONARIO"));
+		this.txtFieldDicionario = new JFormattedTextField(format);
 		
 		this.layoutGeral = new GridLayout(1,1,5,5);
 		this.layoutCampos = new GridLayout(2,2);
@@ -60,10 +58,10 @@ public class ViewConfigScreen {
 		this.panelCampos = new JPanel();
 		this.panelCampos.setLayout(layoutCampos);
 		
-		this.panelCampos.add(lblSigma,0,0);
-		this.panelCampos.add(txtFieldSigma,0,1);
-		this.panelCampos.add(lblTamanho,1,0);
-		this.panelCampos.add(txtFieldTamanho,1,1);
+		this.panelCampos.add(lblBuffer,0,0);
+		this.panelCampos.add(txtFieldBuffer,0,1);
+		this.panelCampos.add(lblDicionario,1,0);
+		this.panelCampos.add(txtFieldDicionario,1,1);
 		
 		this.panelMain.add(this.panelCampos,0);
 	}
@@ -77,18 +75,18 @@ public class ViewConfigScreen {
 	}
 
 	public JFormattedTextField getTxtFieldSigma() {
-		return txtFieldSigma;
+		return txtFieldBuffer;
 	}
 
 	public void setTxtFieldSigma(JFormattedTextField txtFieldConfig1) {
-		this.txtFieldSigma = txtFieldConfig1;
+		this.txtFieldBuffer = txtFieldConfig1;
 	}
 
 	public JFormattedTextField getTxtFieldSize() {
-		return txtFieldTamanho;
+		return txtFieldDicionario;
 	}
 
 	public void setTxtFieldSize(JFormattedTextField txtFieldConfig2) {
-		this.txtFieldTamanho = txtFieldConfig2;
+		this.txtFieldDicionario = txtFieldConfig2;
 	}
 }
