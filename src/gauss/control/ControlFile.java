@@ -17,6 +17,7 @@ public class ControlFile {
 	private JFileChooser fileChooserSave;
 	private FileFilter ffOpen, ffSave;
 	private Properties config;
+	private long size = 0;
 	
 	public ControlFile() throws IOException{
 		this.config = new Properties();
@@ -39,6 +40,7 @@ public class ControlFile {
 	}
 	
 	public BufferedImage openImage(JFrame jf) throws IOException{
+		this.size = 0;
 		File f = null;
 		int chooseReturn = 0;
 		BufferedImage bi = null;
@@ -48,6 +50,8 @@ public class ControlFile {
 			f = this.fileChooserOpen.getSelectedFile();
 			System.out.println("[LOG] Arquivo escolhido: " + f.getName());
 			bi = ImageIO.read(f);
+			System.out.println("[LOG] Tamanho do aqtuigo: "+ f.length());
+			this.size = f.length();
 			return bi;
 		}
 		
@@ -61,13 +65,20 @@ public class ControlFile {
 		
 		if(chooseReturn == JFileChooser.APPROVE_OPTION){
 			f = this.fileChooserSave.getSelectedFile();
-			System.out.println("[LOG] Arquivo escolhido: " + f.getAbsolutePath());
-			if(f.getAbsolutePath().endsWith(".lz77"))
+			if(f.getAbsolutePath().endsWith(".lz77")){
+				System.out.println("[LOG] Arquivo escolhido: " + f.getAbsolutePath());
 				return f.getAbsolutePath();
-			else
+			}
+			else{
+				System.out.println("[LOG] Arquivo escolhido: " + f.getAbsolutePath() + ".lz77");
 				return f.getAbsolutePath()+".lz77";
+			}
 		}
 		
 		return null;
+	}
+	
+	public long getSize(){
+		return this.size;
 	}
 }

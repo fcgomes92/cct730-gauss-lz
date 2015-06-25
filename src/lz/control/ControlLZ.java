@@ -10,49 +10,70 @@ import javax.swing.JOptionPane;
 import lz.view.ViewConfigScreenLZ;
 
 public class ControlLZ {
-	
+
 	private ViewConfigScreenLZ configDialog;
+	private ControlFile controlFile;
 	private int sizeDict;
 	private int sizeBuf;
 	private String input;
 	private Properties config;
-	
-	public ControlLZ() throws IOException, ParseException{
+	private int qtdTuples = 0;
+	private long oSize = 0;
+
+	public ControlLZ() throws IOException, ParseException {
 		this.configDialog = new ViewConfigScreenLZ();
+		this.controlFile = new ControlFile();
 		this.sizeBuf = 0;
 		this.sizeDict = 0;
 	}
-	
-	public void saveUsingLZ77(String input, String path) throws IOException{
+
+	public void saveUsingLZ77(String input, String path, long originalSize) throws IOException {
+		this.oSize = originalSize;
+		this.input = input;
 		this.config = new Properties();
-		InputStream in = getClass().getResourceAsStream("/lz/util/resources/ResourcesStringsLZ.properties");
+		InputStream in = getClass().getResourceAsStream(
+				"/lz/util/resources/ResourcesStringsLZ.properties");
 		this.config.load(in);
-		in.close();		
+		in.close();
 		// GET VARS COMPR
-		int result = JOptionPane.showConfirmDialog(null, this.configDialog.getPanelMain(), 
-	               "Config", JOptionPane.OK_CANCEL_OPTION);
-		
-		 if(result == JOptionPane.OK_OPTION 
-				 && this.configDialog.getTxtFieldDicionario() != null
-			     && this.configDialog.getTxtFieldBuffer() != null
-				 && !this.configDialog.getTxtFieldBuffer().getText().isEmpty()
-				 && !this.configDialog.getTxtFieldDicionario().getText().isEmpty()){
-			 
-			 this.sizeBuf = Integer.parseInt(this.configDialog.getTxtFieldBuffer().getText());
-			 this.sizeDict = Integer.parseInt(this.configDialog.getTxtFieldDicionario().getText());
-			 this.input = input;
-			 
-			 // COMPR
-			 this.compressLZ77();
-			 JOptionPane.showMessageDialog(null, this.config.getProperty("SAVE_CONFIRM_TEXT"), this.config.getProperty("SAVE_CONFIRM_TEXT"), JOptionPane.INFORMATION_MESSAGE);
-		 }
-		 else JOptionPane.showMessageDialog(null, this.config.getProperty("SAVE_ERR_TEXT"), this.config.getProperty("SAVE_ERR_TEXT"), JOptionPane.ERROR_MESSAGE);
+		int result = JOptionPane.showConfirmDialog(null,
+				this.configDialog.getPanelMain(), "Config",
+				JOptionPane.OK_CANCEL_OPTION);
+
+		if (result == JOptionPane.OK_OPTION
+				&& this.configDialog.getTxtFieldDicionario() != null
+				&& this.configDialog.getTxtFieldBuffer() != null
+				&& !this.configDialog.getTxtFieldBuffer().getText().isEmpty()
+				&& !this.configDialog.getTxtFieldDicionario().getText()
+						.isEmpty()) {
+
+			this.sizeBuf = Integer.parseInt(this.configDialog
+					.getTxtFieldBuffer().getText().replace(",", ""));
+			this.sizeDict = Integer.parseInt(this.configDialog
+					.getTxtFieldDicionario().getText().replace(",", ""));
+			this.input = input;
+
+			// COMPR
+			String stringComprimida = "";
+			stringComprimida = this.LZ77();
+//			System.out.println(stringComprimida);
+			this.controlFile.saveString(path, stringComprimida);
+			
+			JOptionPane.showMessageDialog(null,
+					this.config.getProperty("SAVE_CONFIRM_TEXT"),
+					this.config.getProperty("SAVE_CONFIRM_TEXT"),
+					JOptionPane.INFORMATION_MESSAGE);
+		} else
+			JOptionPane.showMessageDialog(null,
+					this.config.getProperty("SAVE_ERR_TEXT"),
+					this.config.getProperty("SAVE_ERR_TEXT"),
+					JOptionPane.ERROR_MESSAGE);
 	}
-	
-	public void compressLZ77(){
+
+	public void compressLZ77() {
 		this.input = "Testando esssa budega";
 	}
-	
+
 	public int getSizeDict() {
 		return sizeDict;
 	}
@@ -67,5 +88,89 @@ public class ControlLZ {
 
 	public void setSizeBuf(int sizeBuf) {
 		this.sizeBuf = sizeBuf;
+	}
+
+	private String LZ77() {
+		String output = "";
+		String lookfor = "";
+		String literal = "";
+		String dicionario = "";
+		String buffer = "";	
+		this.qtdTuples = 0;
+		int k;
+		int i = 0;
+		while(i < input.length()){
+			int dictInicial = i-this.getSizeDict();
+			if(dictInicial < 0) dictInicial = 0;
+			if(i > input.length() || dictInicial > i) dicionario = "";
+			else dicionario = input.substring(dictInicial, i);
+			if(i+this.getSizeBuf()>this.input.length()) buffer = this.input.substring(i, this.input.length());
+			else buffer = this.input.substring(i, i+this.getSizeBuf());
+			lookfor = ("0,0"+input.charAt(i));
+			for(k = buffer.length();k>0;k--){
+				int indice = dicionario.lastIndexOf(buffer.substring(0, k));
+				if(indice >=0){
+					literal = "";
+					if((i+k)<input.length()) literal = ""+input.charAt(i+k);
+					lookfor = (dicionario.length()-indice-1+","+k+","+literal);
+					break;
+				}
+			}
+			i = i+ k + 1;
+			output += lookfor+";";
+			qtdTuples++;
+		}
+		System.out.println("Quantidade de tuplas: " + qtdTuples);
+		System.out.println("Porcentagem: " + ((double)((long)qtdTuples)/this.oSize));
+		return output;
+	}
+	
+//	private String LZ77(){
+//		String output = "";
+//        String search = "";
+//        String input = this.input;
+//
+//        String next;
+//        int indexGood = 0;
+//        int indexFound;
+//        int searchLen;
+//
+//        while ( input.length() > 0 )
+//        {
+//                searchLen = this.getSizeBuf();
+//                next = input.substring( 0, searchLen );
+//                if ( search.indexOf( next ) == -1 )
+//                {
+//                        output += next;
+//                        search += next;
+//                        input = input.substring( searchLen );
+//                        continue;
+//                }
+//                do
+//                {
+//                        next = input.substring( 0, searchLen );
+//                        indexFound = search.indexOf( next );
+//                        if ( indexFound != -1 )
+//                                indexGood = indexFound;
+//                        searchLen++;
+//                }
+//                while ( indexFound != -1 );
+//                search += next.substring( 0, next.length() );
+//                input = input.substring( next.length() );
+//                output += indexGood + "" +(next.length() - 1) + "" + next.substring( next.length() - 1 );
+//
+//        }
+//        return output;
+//	}
+
+	private String getDicionario(int p) {
+		if (p == 0)
+			return "";
+
+		if (p < this.getSizeDict()) {
+			return this.input.substring(0, p);
+		} else {
+			return this.input.substring(p - this.getSizeDict(), p);
+		}
 	}
 }

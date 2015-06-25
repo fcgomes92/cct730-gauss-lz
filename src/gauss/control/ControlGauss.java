@@ -4,9 +4,13 @@ import gauss.model.DrawPanel;
 import gauss.view.ViewGauss;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
@@ -40,7 +44,7 @@ public class ControlGauss {
 		try {
 			String path = controlFile.saveImage(jf);
 			if(path != null && !path.isEmpty())
-				controlLZ.saveUsingLZ77(null,path);
+				controlLZ.saveUsingLZ77(this.imageToString(),path,controlFile.getSize());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,6 +58,22 @@ public class ControlGauss {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String imageToString(){
+		String output;
+		//int count = 0;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(imagemAlterada, "jpg", baos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		byte[] b = baos.toByteArray();
+		output = Arrays.toString(b);
+		output = output.replaceAll(", ", "").replace("[", "").replace("]", "").replace("-", "");
+		System.out.println("Imagem alterada: "+output);
+		return output;
 	}
 	
 	public void startFilter(JScrollPane sp, DrawPanel p, int sz, int sig){
