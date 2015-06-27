@@ -17,10 +17,8 @@ public class ControlFile {
 			
 			File f = new File(fileName);
 			this.fos = new FileOutputStream(f);
-//			this.fos.write(data.getBytes("utf-8"),0,data.getBytes().length);
 			this.dos = new DataOutputStream(this.fos);
 			this.dos.write(data.getBytes());
-			System.out.println("Tamanho arquivo: " + f.length());
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("[ERRO] Erro ao salvar o arquivo!");

@@ -28,6 +28,7 @@ public class ControlLZ {
 	}
 
 	public void saveUsingLZ77(String input, String path, long originalSize) throws IOException {
+		String compressao = "";
 		this.oSize = originalSize;
 		this.input = input;
 		this.config = new Properties();
@@ -56,11 +57,13 @@ public class ControlLZ {
 			// COMPR
 			String stringComprimida = "";
 			stringComprimida = this.LZ77();
-//			System.out.println(stringComprimida);
 			this.controlFile.saveString(path, stringComprimida);
 			
+			System.out.println("Quantidade de tuplas: " + qtdTuples);
+			compressao = (String.format("Porcentagem compressão: %.2f %", ((double)((long)qtdTuples)/this.oSize)*100));
+			
 			JOptionPane.showMessageDialog(null,
-					this.config.getProperty("SAVE_CONFIRM_TEXT"),
+					compressao,
 					this.config.getProperty("SAVE_CONFIRM_TEXT"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} else
@@ -120,57 +123,6 @@ public class ControlLZ {
 			output += lookfor+";";
 			qtdTuples++;
 		}
-		System.out.println("Quantidade de tuplas: " + qtdTuples);
-		System.out.println("Porcentagem: " + ((double)((long)qtdTuples)/this.oSize));
 		return output;
-	}
-	
-//	private String LZ77(){
-//		String output = "";
-//        String search = "";
-//        String input = this.input;
-//
-//        String next;
-//        int indexGood = 0;
-//        int indexFound;
-//        int searchLen;
-//
-//        while ( input.length() > 0 )
-//        {
-//                searchLen = this.getSizeBuf();
-//                next = input.substring( 0, searchLen );
-//                if ( search.indexOf( next ) == -1 )
-//                {
-//                        output += next;
-//                        search += next;
-//                        input = input.substring( searchLen );
-//                        continue;
-//                }
-//                do
-//                {
-//                        next = input.substring( 0, searchLen );
-//                        indexFound = search.indexOf( next );
-//                        if ( indexFound != -1 )
-//                                indexGood = indexFound;
-//                        searchLen++;
-//                }
-//                while ( indexFound != -1 );
-//                search += next.substring( 0, next.length() );
-//                input = input.substring( next.length() );
-//                output += indexGood + "" +(next.length() - 1) + "" + next.substring( next.length() - 1 );
-//
-//        }
-//        return output;
-//	}
-
-	private String getDicionario(int p) {
-		if (p == 0)
-			return "";
-
-		if (p < this.getSizeDict()) {
-			return this.input.substring(0, p);
-		} else {
-			return this.input.substring(p - this.getSizeDict(), p);
-		}
 	}
 }
